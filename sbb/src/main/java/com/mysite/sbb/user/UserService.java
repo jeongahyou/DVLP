@@ -29,7 +29,7 @@ public class UserService {
 		if (siteUser.isPresent()) {
 			return siteUser.get();
 		} else {
-			throw new DataNotFoundException("siteuser ont found");
+			throw new DataNotFoundException("siteuser not found");
 		}
 	}
 }
