@@ -16,6 +16,12 @@
                'yyyy-MM-dd HH:mm')}"></div>
                 </div>
             </div>
+			<div class="my-3">
+			            <a th:href="@{|/question/modify/${question.id}|}" class="btn btn-sm btn-outline-secondary"
+			               sec:authorize="isAuthenticated()"
+			               th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
+			               th:text="수정"></a>
+			</div>
         </div>
     </div>
     <!-- 답변의 갯수 표시 -->
@@ -35,6 +41,12 @@
                'yyyy-MM-dd HH:mm')}"></div>
                 </div>
             </div>
+			<div class="my-3">
+			            <a th:href="@{|/answer/modify/${answer.id}|}" class="btn btn-sm btn-outline-secondary"
+			               sec:authorize="isAuthenticated()"
+			               th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}"
+			               th:text="수정"></a>
+			</div>
         </div>
     </div>
     <!-- 답변 반복 끝  -->
