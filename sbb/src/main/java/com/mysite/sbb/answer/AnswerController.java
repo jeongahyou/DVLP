@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mysite.sbb.question.Question;
 import com.mysite.sbb.question.QuestionService;
@@ -30,16 +31,21 @@ public class AnswerController {
 	private final AnswerService answerService;
 	private final UserService userService;
 	
-	@PreAuthorize("isAuthenticated()")
-	@PostMapping("/create/{id}")
-	   public String createAnswer(Model model, @PathVariable("id") Integer id, @Valid AnswerForm answerForm, BindingResult bindingResult, Principal principal) {
+	   @PreAuthorize("isAuthenticated()")
+	   @PostMapping("/create/{id}")
+	   public String createAnswer(Model model, @PathVariable("id") Integer id, @Valid AnswerForm answerForm,
+	         BindingResult bindingResult, Principal principal, RedirectAttributes re) {
 	      Question question = this.questionService.getQuestion(id);
+	      // TODO: 답변저장
 	      SiteUser siteUser = this.userService.getUser(principal.getName());
 	      if (bindingResult.hasErrors()) {
-	    	  model.addAttribute("question", question);
-	    	  return "question_detail";
+	         model.addAttribute("question", question);
+	         return "question_detail";
 	      }
-	      Answer answer = answerService.create(question, answerForm.getContent(), siteUser);
+	      Answer answer = this.answerService.create(question, answerForm.getContent(), siteUser);
+	      int page = (question.getAnswerList().size())/11;
+	      re.addAttribute("page", page);
+//	      return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());
 	      return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());
 	   }
 	
@@ -70,15 +76,16 @@ public class AnswerController {
 	}
 	
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/delete/{id}")
-	public String answerDelete(Principal principal, @PathVariable("id") Integer id) {
-		Answer answer = this.answerService.getAnswer(id);
-		if (!answer.getAuthor().getUsername().equals(principal.getName())) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
-		}
-		this.answerService.delete(answer);
-		return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
-	}
+	   @GetMapping("/delete/{id}")
+	   public String answerDelete(Principal principal, @PathVariable("id") Integer id) {
+	      Answer answer = this.answerService.getAnswer(id);
+	      if (!answer.getAuthor().getUsername().equals(principal.getName())) {
+	         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+	      }
+	      this.answerService.delete(answer);
+	      int page = (answer.getQuestion().getAnswerList().size())/11;
+	      return String.format("redirect:/question/detail/%s?page=%s", answer.getQuestion().getId(), page);
+	   }
 	
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/vote/{id}")
