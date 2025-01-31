@@ -1,6 +1,7 @@
 package com.mysite.sbb.user;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,4 +51,18 @@ public class UserController {
 		public String login() {
 			return "login_form";
 		}
+		// 유저 이름, 이메일
+	      // 이름은 html에서 #authentication.getPrincipal().getUsername() 로 불러오기가 가능하지만
+	      // 이메일은 기본적으로 제공하는 메소드가 없음 principal 객체를 통해 이메일만 string으로 불러와서 model에 담아 전송예정
+	      // 유저가 쓴 게시글
+	      // 게시글을 page로 받아서 구현할 예정
+	      // 유저가 쓴 댓글 조회
+	      // 댓글도 마찬가지로 page로 받아서 구현할 예정
+	    @PreAuthorize("isAuthenticated()")
+	    @GetMapping("/userDetail")
+	    public String userDetail() {
+	    	
+	        return "user_detail";
+	    }
+		
 }

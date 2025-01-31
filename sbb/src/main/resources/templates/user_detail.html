@@ -1,0 +1,18 @@
+<html layout:decorate="~{layout}">
+	<div layout:fragment="content" class="container my-3">
+	    <h2 class="border-bottom py-2" >내 정보</h2>
+	    <div class="card my-3">
+	        <div class="card-body">
+	            <div class="mb-3">
+	                <label class="form-label">사용자 ID</label>
+	                <input type="text" th:value="${#authentication.getPrincipal().getUsername()}" class="form-control" readonly>
+	            </div>
+	            <div class="mb-3">
+	                <label class="form-label">이메일</label>
+	                <input type="text" th:value="${email}" class="form-control" readonly>
+	            </div>
+	        </div>
+	    </div>
+		</div>
+		
+</html>
