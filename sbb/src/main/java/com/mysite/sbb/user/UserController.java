@@ -1,8 +1,11 @@
 package com.mysite.sbb.user;
 
+import java.security.Principal;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,10 +61,13 @@ public class UserController {
 	      // 게시글을 page로 받아서 구현할 예정
 	      // 유저가 쓴 댓글 조회
 	      // 댓글도 마찬가지로 page로 받아서 구현할 예정
+		
 	    @PreAuthorize("isAuthenticated()")
 	    @GetMapping("/userDetail")
-	    public String userDetail() {
-	    	
+	    public String userDetail(Model model, Principal principal) {
+	    	SiteUser siteUser = this.userService.getUser(principal.getName());
+	        model.addAttribute("username", siteUser.getUsername());
+	        model.addAttribute("userEmail", siteUser.getEmail());
 	        return "user_detail";
 	    }
 		
