@@ -46,4 +46,6 @@ public class Question {
 	@ManyToMany
 	Set<SiteUser> voter;
 	
+	@Column
+	private String category;
 }

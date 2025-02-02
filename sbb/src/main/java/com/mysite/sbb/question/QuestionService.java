@@ -75,8 +75,9 @@ public class QuestionService {
       
    }
    
-   public void create(String subject, String content, SiteUser user) {
+   public void create(String subject, String content, String category, SiteUser user) {
 	   Question q = new Question();
+	   q.setCategory(category);
 	   q.setSubject(subject);
 	   q.setContent(content);
 	   q.setCreateDate(LocalDateTime.now());

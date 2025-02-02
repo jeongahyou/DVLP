@@ -8,6 +8,10 @@
 <!--         <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>-->
 <!--      </div>      -->
 		<div th:replace="~{form_errors :: formErrorsFragment}"></div>
+		<select class="category" name="category" required>
+			<option value="1">질문</option>
+			<option value="2">기타</option>
+		</select>
 		<div class="mb-3">
             <label for="subject" class="form-label">제목</label>
             <input type="text" th:field="*{subject}" class="form-control">

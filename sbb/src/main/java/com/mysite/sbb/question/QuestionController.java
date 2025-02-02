@@ -63,8 +63,12 @@ public class QuestionController {
 		if (bindingResult.hasErrors()) {
 			return "question_form";
 		}
+		System.out.println(questionForm.getSubject());
+		System.out.println(questionForm.getContent());
+		System.out.println(questionForm.getCategory());
+		
 		SiteUser siteUser = this.userService.getUser(principal.getName());
-		this.questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser);
+		this.questionService.create(questionForm.getSubject(), questionForm.getContent(), questionForm.getCategory(),  siteUser);
 		return "redirect:/question/list"; // 질문 저장 후 질문 목록으로 이동
 	}
 	
