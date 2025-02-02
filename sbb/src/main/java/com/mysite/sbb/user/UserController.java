@@ -73,11 +73,18 @@ public class UserController {
 		
 	    @PreAuthorize("isAuthenticated()")
 	    @GetMapping("/userDetail")
-	    public String userDetail(Model model, @RequestParam(value="question-page", defaultValue="0") int questionPage,
-                @RequestParam(value="ans-page", defaultValue="0") int ansPage, Principal principal) {
+	    public String userDetail(Model model, 
+	    		@RequestParam(value="question-page", defaultValue="0") int questionPage,
+                @RequestParam(value="ans-page", defaultValue="0") int ansPage, 
+                Principal principal) {
 	    	SiteUser siteUser = this.userService.getUser(principal.getName());
 	    	Page<Question> wroteQuestions = this.questionService.getListByAuthor(questionPage, siteUser);
 	        Page<Answer> wroteAnswers = this.answerService.getListByAuthor(ansPage, siteUser);
+	        
+	        System.out.println(siteUser.getUsername());
+	        System.out.println(siteUser.getEmail());
+	        System.out.println(wroteQuestions.toString());
+	        System.out.println(wroteAnswers.toString());
 	        
 	        model.addAttribute("wrote_question_paging", wroteQuestions);
 	        model.addAttribute("wrote_answer_paging", wroteAnswers);
