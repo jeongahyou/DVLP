@@ -3,6 +3,7 @@ package com.mysite.sbb.user;
 import java.security.Principal;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +11,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.mysite.sbb.answer.Answer;
+import com.mysite.sbb.answer.AnswerService;
+import com.mysite.sbb.question.Question;
+import com.mysite.sbb.question.QuestionService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 	
 	private final UserService userService;
+	private final QuestionService questionService;
+	private final AnswerService answerService;
 	
 	@GetMapping("/signup")
 	public String signup(UserCreateForm userCreateForm) {
@@ -64,8 +73,14 @@ public class UserController {
 		
 	    @PreAuthorize("isAuthenticated()")
 	    @GetMapping("/userDetail")
-	    public String userDetail(Model model, Principal principal) {
+	    public String userDetail(Model model, @RequestParam(value="question-page", defaultValue="0") int questionPage,
+                @RequestParam(value="ans-page", defaultValue="0") int ansPage, Principal principal) {
 	    	SiteUser siteUser = this.userService.getUser(principal.getName());
+	    	Page<Question> wroteQuestions = this.questionService.getListByAuthor(questionPage, siteUser);
+	        Page<Answer> wroteAnswers = this.answerService.getListByAuthor(ansPage, siteUser);
+	        
+	        model.addAttribute("wrote_question_paging", wroteQuestions);
+	        model.addAttribute("wrote_answer_paging", wroteAnswers);
 	        model.addAttribute("username", siteUser.getUsername());
 	        model.addAttribute("userEmail", siteUser.getEmail());
 	        return "user_detail";

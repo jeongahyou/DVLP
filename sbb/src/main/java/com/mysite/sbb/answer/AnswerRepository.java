@@ -11,5 +11,5 @@ import com.mysite.sbb.user.SiteUser;
 public interface AnswerRepository extends JpaRepository<Answer, Integer> {
 	Page<Answer> findAllByQuestion(Question question, Pageable pageable);
 	
-	Page<Question> findByAuthor(SiteUser siteUser, Pageable pageable);
+	Page<Answer> findByAuthor(SiteUser siteUser, Pageable pageable);
 }

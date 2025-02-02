@@ -100,7 +100,13 @@ public class QuestionService {
 		this.questionRepository.save(question);
 
 	}
-   
+	
+    public Page<Question> getListByAuthor(int page, SiteUser siteUser) {
+        List<Sort.Order> sorts = new ArrayList();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return this.questionRepository.findByAuthor(siteUser, pageable);
+    }
 	
    
 }
