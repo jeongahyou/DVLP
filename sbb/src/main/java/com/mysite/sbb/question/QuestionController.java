@@ -63,10 +63,6 @@ public class QuestionController {
 		if (bindingResult.hasErrors()) {
 			return "question_form";
 		}
-		System.out.println(questionForm.getSubject());
-		System.out.println(questionForm.getContent());
-		System.out.println(questionForm.getCategory());
-		
 		SiteUser siteUser = this.userService.getUser(principal.getName());
 		this.questionService.create(questionForm.getSubject(), questionForm.getContent(), questionForm.getCategory(),  siteUser);
 		return "redirect:/question/list"; // 질문 저장 후 질문 목록으로 이동
@@ -81,6 +77,7 @@ public class QuestionController {
 		}
 		questionForm.setSubject(question.getSubject());
 		questionForm.setContent(question.getContent());
+		// 카테고리 추가 필요
 		return "question_form";
 	}
 	
@@ -96,6 +93,7 @@ public class QuestionController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
 		this.questionService.modify(question, questionForm.getSubject(), questionForm.getContent());
+		// 카테고리 추가 필요
 		return String.format("redirect:/question/detail/%s", id);
 	}
 	
