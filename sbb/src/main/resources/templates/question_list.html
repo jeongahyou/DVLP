@@ -13,9 +13,18 @@
 			</div>
 		</div>
 	</div>
+	<div>
+		<div>
+			<ul>
+				<li><a>질문</a></li>
+				<li><a>기타</a></li>
+			</ul>
+		</div>
+	</div>
 	<table class="table">
 			<thead class="table-dark">
 					<tr class="text-center">
+						<th>카테고리</th>
 						<th>번호</th>
 						<th style="width:50%">제목</th>
 						<th>글쓴이</th>
@@ -24,6 +33,7 @@
 			</thead>
 			<tbody>
 				<tr class="text-center" th:each="question, loop : ${paging}">
+					<td><span th:text="${question.category}"></span></td>
 					<td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
 <!--				<td th:text="${loop.count}"></td>-->
 					<td class="text-start">
